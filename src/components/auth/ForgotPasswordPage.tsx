@@ -20,12 +20,16 @@ export function ForgotPasswordPage({ brand }: ForgotPasswordPageProps) {
     e.preventDefault();
     setLoading(true);
     try {
-      await authClient.requestPasswordReset({
+      const res = await authClient.requestPasswordReset({
         email,
         redirectTo: `${window.location.origin}/auth/reset-password`,
       });
-      setSent(true);
-      toast.success("Password reset link sent to your email");
+      if (res.error) {
+        toast.error("No account found with that email address.");
+      } else {
+        setSent(true);
+        toast.success("Password reset link sent to your email");
+      }
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
     } finally {
