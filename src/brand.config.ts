@@ -14,6 +14,10 @@ export const brand: AuthBrandConfig = {
   homeRoute: "/",
   dashboardRoute: "/dashboard",
   maxLoginAttempts: 3,
+  features: {
+    googleAuth: false,
+    twoFactor: true,
+  },
   colors: {
     primary: "teal-600",
     primaryHover: "teal-700",

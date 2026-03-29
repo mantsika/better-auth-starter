@@ -7,5 +7,8 @@ export { ResetPasswordPage } from "./ResetPasswordPage";
 export { LogoutButton } from "./LogoutButton";
 export { PasswordInput } from "./PasswordInput";
 export { PasswordStrength, validatePassword, isPasswordValid } from "./PasswordStrength";
+export { GoogleSignInButton } from "./GoogleSignInButton";
+export { TwoFactorVerify } from "./TwoFactorVerify";
+export { TwoFactorSetup } from "./TwoFactorSetup";
 export { defaultBrandConfig } from "./config";
 export type { AuthBrandConfig } from "./config";

@@ -11,6 +11,7 @@ import {
   ForgotPasswordPage,
   VerifyEmailPage,
   ResetPasswordPage,
+  TwoFactorVerify,
 } from "./components/auth";
 import { authClient } from "./lib/auth";
 import { brand } from "./brand.config";
@@ -73,7 +74,6 @@ export default function App() {
     <Router>
       <Toaster position="top-center" richColors />
       <Routes>
-        {/* Home — redirect to dashboard if signed in */}
         <Route
           path="/"
           element={
@@ -111,8 +111,9 @@ export default function App() {
         <Route path="/auth/forgot-password" element={<ForgotPasswordPage brand={brand} />} />
         <Route path="/auth/verify-email" element={<VerifyEmailPage brand={brand} />} />
         <Route path="/auth/reset-password" element={<ResetPasswordPage brand={brand} />} />
+        <Route path="/auth/two-factor" element={<TwoFactorVerify brand={brand} />} />
 
-        {/* Protected app routes — replace Dashboard with your pages */}
+        {/* Protected app routes */}
         <Route
           path="/dashboard"
           element={

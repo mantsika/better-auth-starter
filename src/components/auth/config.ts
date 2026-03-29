@@ -5,16 +5,20 @@ export interface AuthBrandConfig {
   logoComponent: ComponentType<{ size?: number; className?: string }>;
   homeRoute: string;
   dashboardRoute: string;
-  maxLoginAttempts?: number; // default 3
+  maxLoginAttempts?: number;
+  features?: {
+    googleAuth?: boolean;
+    twoFactor?: boolean;
+  };
   colors: {
-    primary: string;       // e.g. "teal-600"
-    primaryHover: string;  // e.g. "teal-700"
-    primaryLight: string;  // e.g. "teal-50"
-    ring: string;          // e.g. "teal-600"
-    shadow: string;        // e.g. "teal-100"
-    logoShadow: string;    // e.g. "teal-200/50"
-    link: string;          // e.g. "teal-600"
-    linkHover: string;     // e.g. "teal-700"
+    primary: string;
+    primaryHover: string;
+    primaryLight: string;
+    ring: string;
+    shadow: string;
+    logoShadow: string;
+    link: string;
+    linkHover: string;
   };
 }
 
@@ -23,6 +27,10 @@ export const defaultBrandConfig: AuthBrandConfig = {
   logoComponent: () => null,
   homeRoute: "/",
   dashboardRoute: "/dashboard",
+  features: {
+    googleAuth: false,
+    twoFactor: true,
+  },
   colors: {
     primary: "teal-600",
     primaryHover: "teal-700",

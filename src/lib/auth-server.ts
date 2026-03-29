@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { betterAuth } from "better-auth";
+import { twoFactor } from "better-auth/plugins";
 import { Pool } from "pg";
 import { Resend } from "resend";
 
@@ -29,10 +30,27 @@ const trustedOrigins = (process.env.FRONTEND_URL || "")
 const maxLoginAttempts = parseInt(process.env.MAX_LOGIN_ATTEMPTS || "3", 10);
 const lockoutWindowSeconds = parseInt(process.env.LOCKOUT_WINDOW_SECONDS || "900", 10);
 
+const googleEnabled =
+  process.env.ENABLE_GOOGLE_AUTH === "true" &&
+  !!process.env.GOOGLE_CLIENT_ID &&
+  !!process.env.GOOGLE_CLIENT_SECRET;
+
+const twoFactorEnabled = process.env.ENABLE_2FA !== "false";
+
 export const auth = betterAuth({
+  appName,
   baseURL: process.env.APP_URL || "http://localhost:3000",
   secret: process.env.BETTER_AUTH_SECRET || "dev-secret-change-me",
   database: pool,
+  plugins: twoFactorEnabled ? [twoFactor({ issuer: appName })] : [],
+  socialProviders: googleEnabled
+    ? {
+        google: {
+          clientId: process.env.GOOGLE_CLIENT_ID!,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        },
+      }
+    : undefined,
   rateLimit: {
     enabled: true,
     window: 60,

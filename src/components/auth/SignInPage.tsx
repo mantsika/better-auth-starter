@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { authClient } from "../../lib/auth";
 import { AuthLayout } from "./AuthLayout";
 import { PasswordInput } from "./PasswordInput";
+import { GoogleSignInButton } from "./GoogleSignInButton";
 import type { AuthBrandConfig } from "./config";
 
 interface SignInPageProps {
@@ -13,6 +14,7 @@ interface SignInPageProps {
 
 export function SignInPage({ brand }: SignInPageProps) {
   const maxAttempts = brand.maxLoginAttempts ?? 3;
+  const showGoogle = brand.features?.googleAuth ?? false;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,19 @@ export function SignInPage({ brand }: SignInPageProps) {
     if (locked) return;
     setLoading(true);
     try {
-      const res = await authClient.signIn.email({ email, password });
+      const res = await authClient.signIn.email(
+        { email, password },
+        {
+          onSuccess(ctx) {
+            if (ctx.data.twoFactorRedirect) {
+              navigate("/auth/two-factor");
+              return;
+            }
+            setFailedAttempts(0);
+            navigate(brand.dashboardRoute);
+          },
+        }
+      );
       if (res.error) {
         if (res.error.status === 429) {
           setLocked(true);
@@ -51,9 +65,6 @@ export function SignInPage({ brand }: SignInPageProps) {
             `Invalid email or password. ${remaining} attempt${remaining === 1 ? "" : "s"} remaining.`
           );
         }
-      } else {
-        setFailedAttempts(0);
-        navigate(brand.dashboardRoute);
       }
     } catch (err: any) {
       toast.error(err?.message || "Something went wrong");
@@ -94,61 +105,74 @@ export function SignInPage({ brand }: SignInPageProps) {
           </Link>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div>
-            <label className="auth-label">Email Address</label>
-            <div className="relative">
-              <Mail className="auth-input-icon" size={16} />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`auth-input focus:ring-2 focus:ring-${c.ring}`}
-                placeholder="name@example.com"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-              <label className="auth-label !mb-0">Password</label>
-              <Link
-                to="/auth/forgot-password"
-                tabIndex={-1}
-                className={`text-[10px] sm:text-xs font-semibold text-${c.link} hover:text-${c.linkHover} transition-colors`}
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <PasswordInput
-              value={password}
-              onChange={setPassword}
-              ringColor={c.ring}
-            />
-          </div>
-
-          {failedAttempts > 0 && (
-            <p className="text-[11px] sm:text-xs text-amber-600 font-medium text-center">
-              {maxAttempts - failedAttempts} attempt{maxAttempts - failedAttempts === 1 ? "" : "s"} remaining before lockout
-            </p>
+        <>
+          {showGoogle && (
+            <>
+              <GoogleSignInButton brand={brand} />
+              <div className="flex items-center gap-3 my-4 sm:my-5">
+                <div className="flex-1 h-px bg-neutral-200" />
+                <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">or</span>
+                <div className="flex-1 h-px bg-neutral-200" />
+              </div>
+            </>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`auth-btn bg-${c.primary} hover:bg-${c.primaryHover} shadow-xl shadow-${c.shadow}`}
-          >
-            {loading ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <>
-                Sign In
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </>
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div>
+              <label className="auth-label">Email Address</label>
+              <div className="relative">
+                <Mail className="auth-input-icon" size={16} />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={`auth-input focus:ring-2 focus:ring-${c.ring}`}
+                  placeholder="name@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+                <label className="auth-label !mb-0">Password</label>
+                <Link
+                  to="/auth/forgot-password"
+                  tabIndex={-1}
+                  className={`text-[10px] sm:text-xs font-semibold text-${c.link} hover:text-${c.linkHover} transition-colors`}
+                >
+                  Forgot password?
+                </Link>
+              </div>
+              <PasswordInput
+                value={password}
+                onChange={setPassword}
+                ringColor={c.ring}
+              />
+            </div>
+
+            {failedAttempts > 0 && (
+              <p className="text-[11px] sm:text-xs text-amber-600 font-medium text-center">
+                {maxAttempts - failedAttempts} attempt{maxAttempts - failedAttempts === 1 ? "" : "s"} remaining before lockout
+              </p>
             )}
-          </button>
-        </form>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`auth-btn bg-${c.primary} hover:bg-${c.primaryHover} shadow-xl shadow-${c.shadow}`}
+            >
+              {loading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  Sign In
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </button>
+          </form>
+        </>
       )}
 
       <div className="auth-footer">
