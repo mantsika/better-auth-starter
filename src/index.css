@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Auth component tokens ──────────────────────────────────────────
+   Edit these classes to adjust responsive sizing across all auth
+   pages from one place. Components reference these class names.
+   ─────────────────────────────────────────────────────────────────── */
+@layer components {
+  .auth-page {
+    @apply min-h-[100dvh] bg-neutral-50 flex flex-col items-center justify-start sm:justify-center px-4 py-4 sm:py-12 overflow-y-auto;
+  }
+  .auth-logo-link {
+    @apply flex items-center gap-2 mb-3 sm:mb-8 shrink-0;
+  }
+  .auth-logo-text {
+    @apply text-base sm:text-xl font-bold tracking-tight text-neutral-900;
+  }
+  .auth-card {
+    @apply w-full max-w-md bg-white border border-neutral-200 rounded-2xl sm:rounded-[2.5rem] p-5 sm:p-10 shadow-2xl shadow-neutral-100;
+  }
+  .auth-header {
+    @apply text-center mb-4 sm:mb-8;
+  }
+  .auth-heading {
+    @apply text-xl sm:text-3xl font-black text-neutral-900 mb-1 sm:mb-2 tracking-tight leading-none;
+  }
+  .auth-subtext {
+    @apply text-xs sm:text-base text-neutral-500 font-medium;
+  }
+  .auth-form {
+    @apply space-y-3 sm:space-y-5;
+  }
+  .auth-label {
+    @apply block text-[10px] sm:text-xs font-black text-neutral-400 uppercase tracking-widest mb-1.5 sm:mb-2;
+  }
+  .auth-input {
+    @apply w-full bg-neutral-50 border border-neutral-200 rounded-xl py-3 sm:py-4 pl-10 sm:pl-12 pr-4 text-sm sm:text-base font-bold text-neutral-900 outline-none transition-all;
+  }
+  .auth-input-icon {
+    @apply absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-neutral-400;
+  }
+  .auth-btn {
+    @apply w-full text-white py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all flex items-center justify-center gap-2 group;
+  }
+  .auth-footer {
+    @apply mt-4 sm:mt-8 pt-4 sm:pt-8 border-t border-neutral-100 text-center;
+  }
+  .auth-footer-text {
+    @apply text-xs sm:text-sm text-neutral-500;
+  }
+  .auth-icon-circle {
+    @apply w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4;
+  }
+  .auth-status-text {
+    @apply text-sm sm:text-base font-bold;
+  }
+  .auth-status-detail {
+    @apply text-xs sm:text-sm mb-4 sm:mb-6;
+  }
+}
