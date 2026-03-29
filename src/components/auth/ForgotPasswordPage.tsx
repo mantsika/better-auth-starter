@@ -20,18 +20,13 @@ export function ForgotPasswordPage({ brand }: ForgotPasswordPageProps) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await authClient.requestPasswordReset({
+      await authClient.requestPasswordReset({
         email,
         redirectTo: `${window.location.origin}/auth/reset-password`,
       });
-      if (res.error) {
-        toast.error("No account found with that email address.");
-      } else {
-        setSent(true);
-        toast.success("Password reset link sent to your email");
-      }
-    } catch (err: any) {
-      toast.error(err?.message || "Something went wrong");
+      setSent(true);
+    } catch {
+      setSent(true);
     } finally {
       setLoading(false);
     }
@@ -55,7 +50,7 @@ export function ForgotPasswordPage({ brand }: ForgotPasswordPageProps) {
           </div>
           <p className="auth-status-text text-neutral-900 mb-2">Check your inbox</p>
           <p className="auth-status-detail text-neutral-500">
-            We sent a password reset link to <strong>{email}</strong>
+            If an account exists for <strong>{email}</strong>, we've sent a password reset link.
           </p>
           <button
             onClick={() => setSent(false)}
