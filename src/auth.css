@@ -37,7 +37,7 @@
     @apply absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-neutral-400;
   }
   .auth-btn {
-    @apply w-full text-white py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all flex items-center justify-center gap-2 group;
+    @apply w-full text-white py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg transition-all flex items-center justify-center gap-2;
   }
   .auth-footer {
     @apply mt-4 sm:mt-8 pt-4 sm:pt-8 border-t border-neutral-100 text-center;
